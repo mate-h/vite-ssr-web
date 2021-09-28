@@ -1,5 +1,5 @@
 import { classes } from "./classes";
-import { PageProps } from "./types";
+import { PageProps } from "./types/page";
 
 type Props = { class?: string; itemClass?: string, pageProps: PageProps };
 

@@ -25,10 +25,10 @@ export const themeMiddleware = (req: Request, res: Response<any, ThemeParams>, n
     // @ts-ignore
     res.locals.theme = themeHeader;
   } else {
-    // @ts-ignore
     res.locals.theme = "light";
   }
-  // @ts-ignore
-  console.log(`theme: ${res.locals.theme}`);
+  if (process.env.NODE_ENV === "development") {
+    console.log(`theme: ${res.locals.theme}`);
+  }
   next();
 }

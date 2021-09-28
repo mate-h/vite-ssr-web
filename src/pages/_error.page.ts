@@ -1,4 +1,4 @@
-import { PageProps } from "lib/types";
+import { PageProps } from "lib/types/page";
 
 export { Page };
 

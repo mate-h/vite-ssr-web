@@ -1,5 +1,5 @@
 import { escapeInject as html, dangerouslySkipEscape } from "vite-plugin-ssr";
-import type { PageContext } from "lib/types";
+import type { PageContext } from "lib/types/page";
 import type { PageContextBuiltIn } from "vite-plugin-ssr/types";
 import { createStore } from "lib/store";
 import postcss from "postcss";
@@ -10,10 +10,19 @@ import style from "./style.css";
 import tailwindConfig from "./tailwind.config";
 import { fromContext } from "./context";
 import { renderMetatags } from "./meta";
+import { WebPage } from "schema-dts";
 
 export { render };
 // See https://vite-plugin-ssr.com/data-fetching
 export const passToClient = ["pageProps", "urlPathname", "urlParsed"];
+
+const defaultDocumentProps: WebPage = {
+  '@type': 'WebPage',
+  headline: "Vite SSR App",
+  description: "Vite SSR App",
+  url: "https://vite-plugin-ssr.com",
+  image: "https://vite-plugin-ssr.com/logo.png",
+}
 
 async function render(pageContext: PageContextBuiltIn & PageContext) {
   const { Page, documentProps } = pageContext;
@@ -30,13 +39,10 @@ async function render(pageContext: PageContextBuiltIn & PageContext) {
     autoprefixer()
   ]).process(style).css;
 
-  let metaTags = "";
-  if (documentProps) {
-    metaTags = renderMetatags(documentProps);
-  }
-
+  let metaTags = renderMetatags(documentProps || defaultDocumentProps);
+  const lang = pageContext.locale.tag.language();
   const documentHtml = html`<!DOCTYPE html>
-    <html lang="en">
+    <html lang="${lang}">
       <head>
         <meta charset="UTF-8" />
         <link rel="icon" href="${logoUrl}" />

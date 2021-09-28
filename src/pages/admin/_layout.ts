@@ -3,7 +3,7 @@ import { onMount } from "lib/hydrate";
 import { Logo } from "lib/logo";
 import { OverflowMenu } from "lib/overflow-menu";
 import { ProfileDropdown } from "lib/profile-dropdown";
-import { PageProps } from "lib/types";
+import { PageProps } from "lib/types/page";
 import { uid } from "lib/utils/uid";
 
 export function Layout({children = "", pageProps}: {children?: string, pageProps: PageProps}) {

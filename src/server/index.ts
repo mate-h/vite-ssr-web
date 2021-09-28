@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response } from "express";
 import { createPageRenderer } from "vite-plugin-ssr";
 import config from "../../vite.config";
 import { localeMiddleware, LocaleParams } from "./locale";
@@ -32,15 +32,17 @@ async function startServer() {
   app.use(localeMiddleware);
 
   const renderPage = createPageRenderer({ viteDevServer, isProduction, root });
-  app.get<any, any, any, any, any, Params>("*", async (req, res, next) => {
-    console.log(res.locals);
-    const url = req.originalUrl;
+  app.get("*", async (req, res: Response<any, Params>, next) => {
+    let url = req.originalUrl;
+    if (res.locals.urlWithoutLocale) {
+      url = res.locals.urlWithoutLocale;
+    }
     const pageContextInit = {
       url,
-      theme: req.params.theme,
+      theme: res.locals.theme,
+      locale: res.locals.locale,
     };
     const pageContext = await renderPage(pageContextInit);
-    //console.log(pageContext);
     const { httpResponse } = pageContext;
     if (!httpResponse) return next();
     res.status(httpResponse.statusCode).send(httpResponse.body);

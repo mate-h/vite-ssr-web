@@ -1,4 +1,4 @@
-import { PageProps } from "lib/types";
+import { PageProps } from "lib/types/page";
 import { Layout } from "./_layout";
 
 export { Page };

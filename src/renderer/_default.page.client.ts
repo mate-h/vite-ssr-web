@@ -1,5 +1,5 @@
 import { getPage } from "vite-plugin-ssr/client";
-import type { PageContext } from "lib/types";
+import type { PageContext } from "lib/types/page";
 import type { PageContextBuiltInClient } from "vite-plugin-ssr/types";
 import { createStore } from "lib/store";
 import { fromContext } from "./context";

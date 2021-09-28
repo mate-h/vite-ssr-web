@@ -2,7 +2,7 @@ import { AdminNav } from "./admin-nav";
 import { classes } from "./classes";
 import { onMount } from "./hydrate";
 import { Logo } from "./logo";
-import { PageProps } from "./types";
+import { PageProps } from "./types/page";
 import { uid } from "./utils/uid";
 
 // hash navigation for large, fullscreen modals, interruptive modals, etc.

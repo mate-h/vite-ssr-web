@@ -1,3 +1,4 @@
+import { Locale } from "@phensley/locale";
 import { WebPage } from "schema-dts";
 import { UrlParsed } from "vite-plugin-ssr/shared/utils";
 
@@ -13,5 +14,6 @@ export type PageContext = {
   urlPathname: string;
   urlParsed: UrlParsed;
   theme: "light"|"dark";
+  locale: Locale;
   documentProps: WebPage;
 };
