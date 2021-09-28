@@ -1,3 +1,4 @@
+import { WebPage } from "schema-dts";
 import { UrlParsed } from "vite-plugin-ssr/shared/utils";
 
 export type PageProps = {
@@ -11,8 +12,6 @@ export type PageContext = {
   pageProps: PageProps;
   urlPathname: string;
   urlParsed: UrlParsed;
-  documentProps?: {
-    title?: string;
-    description?: string;
-  };
+  theme: "light"|"dark";
+  documentProps: WebPage;
 };

@@ -1,12 +1,15 @@
 import express from "express";
 import { createPageRenderer } from "vite-plugin-ssr";
 import config from "../../vite.config";
-import { themeMiddleware } from "./theme";
+import { localeMiddleware, LocaleParams } from "./locale";
+import { themeMiddleware, ThemeParams } from "./theme";
 
 const isProduction = process.env.NODE_ENV === "production";
 const root = `${__dirname}/..`;
 
 startServer();
+
+type Params = ThemeParams & LocaleParams;
 
 async function startServer() {
   const app = express();
@@ -26,12 +29,15 @@ async function startServer() {
 
   // middleware
   app.use(themeMiddleware);
+  app.use(localeMiddleware);
 
   const renderPage = createPageRenderer({ viteDevServer, isProduction, root });
-  app.get("*", async (req, res, next) => {
+  app.get<any, any, any, any, any, Params>("*", async (req, res, next) => {
+    console.log(res.locals);
     const url = req.originalUrl;
     const pageContextInit = {
       url,
+      theme: req.params.theme,
     };
     const pageContext = await renderPage(pageContextInit);
     //console.log(pageContext);

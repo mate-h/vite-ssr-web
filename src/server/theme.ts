@@ -5,7 +5,7 @@ export type ThemeParams = {
 }
 
 // theme middleware
-export const themeMiddleware = (req: Request<ThemeParams>, res: Response, next: NextFunction) => {
+export const themeMiddleware = (req: Request, res: Response<any, ThemeParams>, next: NextFunction) => {
   // override from query string
   const { theme } = req.query;
 
@@ -20,12 +20,15 @@ export const themeMiddleware = (req: Request<ThemeParams>, res: Response, next: 
   // Add param to request context
   if (typeof theme === "string" && ["dark", "light"].includes(theme)) {
     // @ts-ignore
-    req.params.theme = theme;
+    res.locals.theme = theme;
   } else if (typeof themeHeader === "string" && ["dark", "light"].includes(themeHeader)) {
     // @ts-ignore
-    req.params.theme = themeHeader;
+    res.locals.theme = themeHeader;
   } else {
-    req.params.theme = "light";
+    // @ts-ignore
+    res.locals.theme = "light";
   }
+  // @ts-ignore
+  console.log(`theme: ${res.locals.theme}`);
   next();
 }

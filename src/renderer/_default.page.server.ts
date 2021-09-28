@@ -9,32 +9,31 @@ import logoUrl from "./favicon.svg";
 import style from "./style.css";
 import tailwindConfig from "./tailwind.config";
 import { fromContext } from "./context";
+import { renderMetatags } from "./meta";
 
 export { render };
 // See https://vite-plugin-ssr.com/data-fetching
 export const passToClient = ["pageProps", "urlPathname", "urlParsed"];
 
 async function render(pageContext: PageContextBuiltIn & PageContext) {
-  const { Page } = pageContext;
+  const { Page, documentProps } = pageContext;
   const pageProps = fromContext(pageContext);
   createStore();
   const pageHtml = Page(pageProps);
 
   // See https://vite-plugin-ssr.com/html-head
-  const { documentProps } = pageContext;
-  const title = (documentProps && documentProps.title) || "Vite SSR app";
-  const desc = (documentProps && documentProps.description) || "App using Vite + vite-plugin-ssr";
-
   // to inline the CSS on the server side
   // may be a performance bottleneck
-  let inlineCss = "";
-  // if (process.env.NODE_ENV === "production") {
-    inlineCss = await postcss([
-      // @ts-ignore
-      tailwindcss(tailwindConfig), 
-      autoprefixer()
-    ]).process(style).css;
-  // }
+  const inlineCss = await postcss([
+    // @ts-ignore
+    tailwindcss(tailwindConfig), 
+    autoprefixer()
+  ]).process(style).css;
+
+  let metaTags = "";
+  if (documentProps) {
+    metaTags = renderMetatags(documentProps);
+  }
 
   const documentHtml = html`<!DOCTYPE html>
     <html lang="en">
@@ -42,10 +41,8 @@ async function render(pageContext: PageContextBuiltIn & PageContext) {
         <meta charset="UTF-8" />
         <link rel="icon" href="${logoUrl}" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="${desc}" />
 
-        <title>${title}</title>
-
+        ${dangerouslySkipEscape(metaTags)}
         <style>${dangerouslySkipEscape(inlineCss)}</style>
       </head>
       <body>
