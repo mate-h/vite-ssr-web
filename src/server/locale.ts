@@ -84,12 +84,11 @@ export function localeMiddleware(
   const lang = req.query.lang;
   if (lang) {
     const param = lang as string;
-    const locale = Locale.resolve(param);
-    if (locale.id === lang) {
+    res.locals.preferredLocale = localeMatcherAll.match(param).locale;
+    if (res.locals.preferredLocale.id === param) {
       res.locals.locale = localeMatcher.match(param).locale;
-      res.locals.preferredLocale = localeMatcherAll.match(param).locale;
       if (process.env.NODE_ENV === "development") {
-        console.log(`matched locale query param ${url} ${res.locals.locale}`);
+        console.log(`matched locale query param ${url} ${res.locals.locale.id}`);
       }
       res.set("Content-Language", res.locals.locale.id);
       return next();
@@ -101,12 +100,11 @@ export function localeMiddleware(
   const path = url.split("/");
   if (path.length > 1) {
     const param = path[1];
-    const locale = Locale.resolve(param);
-    if (locale.id === param) {
+    res.locals.preferredLocale = localeMatcherAll.match(param).locale;
+    if (res.locals.preferredLocale.id === param) {
       res.locals.locale = localeMatcher.match(param).locale;
-      res.locals.preferredLocale = localeMatcherAll.match(param).locale;
       if (process.env.NODE_ENV === "development") {
-        console.log(`matched locale path segment ${param}`);
+        console.log(`matched locale path segment ${res.locals.locale.id}`);
       }
       // rewrite request url by removing the locale segment
       res.locals.urlWithoutLocale = url.substring(param.length + 1);
@@ -122,7 +120,7 @@ export function localeMiddleware(
     res.locals.locale = localeMatcher.match(locale.id).locale;
     res.locals.preferredLocale = localeMatcherAll.match(locale.id).locale;
     if (process.env.NODE_ENV === "development") {
-      console.log(`matched locale TLD ${res.locals.locale}`);
+      console.log(`matched locale TLD ${res.locals.locale.id}`);
     }
     res.set("Content-Language", res.locals.locale.id);
     return next();
@@ -142,7 +140,7 @@ export function localeMiddleware(
       res.locals.locale = mathcedLocale.locale;
 
       if (process.env.NODE_ENV === "development") {
-        console.log(`matched locale Accept-Language ${res.locals.locale}`);
+        console.log(`matched locale Accept-Language ${res.locals.locale.id}`);
       }
       res.set("Content-Language", res.locals.locale.id);
       return next();

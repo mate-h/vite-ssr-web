@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Symbols";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/static/symbols.woff2") format("woff2");
+}
+
+i.icon {
+  font-family: "Symbols";
+  font-style: normal;
+}

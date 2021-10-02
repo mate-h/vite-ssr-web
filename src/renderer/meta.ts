@@ -25,7 +25,10 @@ export function renderMetatags(site: WebPage) {
   `;
 }
 
-// Advanced Google SEO
+// Structured microdata: render itemscope itemtype, itemprop attributes
+// https://html.spec.whatwg.org/multipage/#toc-microdata
+
+// JSON+LD is the recommended approach for Advanced Google SEO
 // https://developers.google.com/search/docs/advanced/structured-data/article
 export function renderAmp(article: WithContext<Article>) {
   const value = merge({

@@ -87,5 +87,9 @@ async function main() {
     );
     console.log("Output: ", `${outDir}/${lang}.ts`);
   });
+  const indexTemplate = `
+${langs.map((l) => `import ${l} from "./${l}";`).join("\n")}
+export { ${langs.join(", ")} };`;
+  fs.writeFileSync(`${outDir}/index.ts`, indexTemplate);
 }
 main();

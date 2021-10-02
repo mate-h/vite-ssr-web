@@ -21,6 +21,7 @@ async function hydrate() {
 
   const app = document.getElementById("page-view");
   if (app) {
+    // hydrate the page
     app.innerHTML = Page(pageProps);
   }
 }

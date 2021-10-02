@@ -3,6 +3,8 @@ import { createPageRenderer } from "vite-plugin-ssr";
 import config from "../../vite.config";
 import { localeMiddleware, LocaleParams } from "./locale";
 import { themeMiddleware, ThemeParams } from "./theme";
+import dotenv from "dotenv";
+dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
 const root = `${__dirname}/..`;
